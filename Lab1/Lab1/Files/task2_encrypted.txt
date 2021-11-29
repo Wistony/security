@@ -1,0 +1,2 @@
+﻿Now try a repeating-key XOR cipher. E.g. it should take a strihello wo and, given the key , xor the first le , then ,  , and then xor next   again,   and so on. You may u
+se an index of coincidence, Hamming distance, Kasiski examination, statistical tests or whatever method you feel would show the best result.
