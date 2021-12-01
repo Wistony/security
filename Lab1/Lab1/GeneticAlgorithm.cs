@@ -8,7 +8,7 @@ namespace Lab1
 {
     public class GeneticAlgorithm
     {
-        private const int PopulationSize = 20;
+        private const int PopulationSize = 70;
         private double mutationRate = 0.5; //percent
         private int numOfSwaps = 2;
         private string Alphabet;
@@ -47,30 +47,27 @@ namespace Lab1
 
         public void run()
         {
-            for (var i = 0; i < 10000; i++)
+            for (var i = 0; i < 100000; i++)
             {
                 Crossover();
-                Console.WriteLine("=========== " + i + "==============");
-                Console.WriteLine("Without New Best: " + withoutNewBest);
-                Console.WriteLine("BestFitness: " + bestKey.fitness);
-                Console.WriteLine("Key: " + bestKey.key);
-                Console.WriteLine("Text: " + bestKey.decryptedText);
+                if (i % 10 == 0)
+                {
+                    Console.WriteLine("=========== " + i + "==============");
+                    Console.WriteLine("Without New Best: " + withoutNewBest);
+                    Console.WriteLine("BestFitness: " + bestKey.fitness);
+                    Console.WriteLine("Key: " + bestKey.key);
+                    Console.WriteLine("Text: " + bestKey.decryptedText);
+                }
+
                 if (withoutNewBest > 50 && numOfSwaps < 10)
                 {
                     withoutNewBest = 0;
                     numOfSwaps += 1;
                 }
 
-                if (withoutNewBest > 100)
+                if (withoutNewBest > 200)
                 {
                     withoutNewBest = 0;
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine("AAAAAAAAAAAAAAAAAAAAA SGDG ______");
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
                     population.Sort((a, b) => a.fitness >= b.fitness ? 1 : -1);
                     var list = new List<Chromosome>();
                     for (var j = 0; j < PopulationSize; j++)
@@ -139,7 +136,7 @@ namespace Lab1
             }
         }
 
-        public Chromosome CrossTwoParent(Chromosome parent1, Chromosome parent2)
+        public string CrossTwoParent(Chromosome parent1, Chromosome parent2)
         {
             var r = new Random();
             var rInt = r.Next(1, 26);
@@ -150,8 +147,8 @@ namespace Lab1
                 if (!newKey.Contains(ch))
                     newKey += ch;
             }
-            
-            return new Chromosome(newKey, encryptedText, bigramDistribution,trigramDistribution);
+
+            return newKey;
         }
         
         public void Crossover()
@@ -161,23 +158,23 @@ namespace Lab1
             {
                 var (parent1, parent2) = TournamentSelection();
                 
-                var child1 = CrossTwoParent(parent1, parent2);
-                while(children.Any(ch => ch.key == child1.key))
+                var childKey1 = CrossTwoParent(parent1, parent2);
+                while(children.Any(ch => ch.key == childKey1))
                 {
                     (parent1, parent2) = TournamentSelection();
-                    child1 = CrossTwoParent(parent1, parent2);
+                    childKey1 = CrossTwoParent(parent1, parent2);
                 }
-                children.Add(child1);
+                children.Add(new Chromosome(childKey1,encryptedText,bigramDistribution, trigramDistribution));
                 
-                var child2 = CrossTwoParent(parent2, parent1);
+                var childKey2 = CrossTwoParent(parent2, parent1);
 
-                while(children.Any(ch => ch.key == child2.key))
+                while(children.Any(ch => ch.key == childKey2))
                 {
                     (parent1, parent2) = TournamentSelection();
-                    child2 = CrossTwoParent(parent2, parent1);
+                    childKey2 = CrossTwoParent(parent2, parent1);
                 }
                 
-                children.Add(child2);
+                children.Add(new Chromosome(childKey2,encryptedText,bigramDistribution, trigramDistribution));
             }
 
             var childrenAndParent = children.Concat(population).ToList();

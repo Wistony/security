@@ -26,8 +26,8 @@ namespace Lab1
             {
                 bigramDistribution[t] = 0;
             }*/
-            CalculateBigramDistribution(englishTextBigramDistribution.Keys.ToList());
-            CalculateTrigramDistribution(englishTextTrigramDistribution.Keys.ToList());
+            CalculateBigramDistribution();
+            CalculateTrigramDistribution();
             CalculateFitness(englishTextBigramDistribution, englishTextTrigramDistribution);
         }
 
@@ -48,7 +48,7 @@ namespace Lab1
             decryptedText = new string(charArray);
         }
 
-        private void CalculateBigramDistribution(List<string> allBigram)
+        private void CalculateBigramDistribution()
         {
             for (var i = 0; i < decryptedText.Length - 1; i++)
             {
@@ -64,7 +64,7 @@ namespace Lab1
             }
             var bigramCount = decryptedText.Length - 1;
 
-            foreach (var bigram in allBigram)
+            /*foreach (var bigram in allBigram)
             {
                 if (bigramDistribution.ContainsKey(bigram))
                 {
@@ -74,10 +74,15 @@ namespace Lab1
                 {
                     bigramDistribution[bigram] = 0;
                 }
+            }*/
+            
+            foreach (var bigram in bigramDistribution.Keys.ToList())
+            {
+                bigramDistribution[bigram] = bigramDistribution[bigram] / bigramCount;
             }
         }
         
-        private void CalculateTrigramDistribution(List<string> allTrigram)
+        private void CalculateTrigramDistribution()
         {
             for (var i = 0; i < decryptedText.Length - 2; i++)
             {
@@ -92,29 +97,45 @@ namespace Lab1
                 }
             }
             var trigramCount = decryptedText.Length - 2;
-            foreach (var trigram in allTrigram)
+            foreach (var trigram in trigramDistribution.Keys.ToList())
             {
-                if (trigramDistribution.ContainsKey(trigram))
+                trigramDistribution[trigram] = 0;
+                /*if (trigramDistribution.ContainsKey(trigram))
                 {
                     trigramDistribution[trigram] = trigramDistribution[trigram] / trigramCount;
                 }
                 else
                 {
                     trigramDistribution[trigram] = 0;
-                }
+                }*/
             }
         }
 
         private void CalculateFitness(Dictionary<string, double> englishTextBigramDistribution,Dictionary<string, double> englishTextTrigramDistribution)
         {
             fitness = 0;
-            foreach (var k in englishTextBigramDistribution.Keys)
+            foreach (var bigram in englishTextBigramDistribution.Keys)
             {
-                fitness += Math.Abs(englishTextBigramDistribution[k] * 100 - bigramDistribution[k] * 100);
+                if (bigramDistribution.ContainsKey(bigram))
+                {
+                    fitness += Math.Abs(englishTextBigramDistribution[bigram] - bigramDistribution[bigram]) * 100;
+                }
+                else
+                {
+                    fitness += englishTextBigramDistribution[bigram] * 100;
+                }
             }
-            foreach (var k in englishTextTrigramDistribution.Keys)
+            
+            foreach (var trigram in englishTextTrigramDistribution.Keys)
             {
-                fitness += Math.Abs(englishTextTrigramDistribution[k] * 100 - trigramDistribution[k] * 100);
+                if (trigramDistribution.ContainsKey(trigram))
+                {
+                    fitness += Math.Abs(englishTextTrigramDistribution[trigram] - trigramDistribution[trigram]) * 300;
+                }
+                else
+                {
+                    fitness += englishTextTrigramDistribution[trigram] * 300;
+                }
             }
         }
     }
