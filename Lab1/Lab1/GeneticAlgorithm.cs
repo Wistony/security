@@ -8,15 +8,15 @@ namespace Lab1
 {
     public class GeneticAlgorithm
     {
-        private const int PopulationSize = 70;
-        private double mutationRate = 0.5; //percent
-        private int numOfSwaps = 2;
+        private const int PopulationSize = 150;
+        private double mutationRate = 0.7; //percent
+        private int numOfSwaps = 1;
         private string Alphabet;
         private string encryptedText;
         private List<Chromosome> population;
 
-        private Dictionary<string, double> bigramDistribution;
-        private Dictionary<string, double> trigramDistribution;
+        public Dictionary<string, double> bigramDistribution;
+        public Dictionary<string, double> trigramDistribution;
 
         private Chromosome bestKey;
         private int withoutNewBest;
@@ -59,11 +59,11 @@ namespace Lab1
                     Console.WriteLine("Text: " + bestKey.decryptedText);
                 }
 
-                if (withoutNewBest > 50 && numOfSwaps < 10)
+                /*if (withoutNewBest > 200 && numOfSwaps < 10)
                 {
                     withoutNewBest = 0;
                     numOfSwaps += 1;
-                }
+                }*/
 
                 if (withoutNewBest > 200)
                 {
@@ -72,7 +72,7 @@ namespace Lab1
                     var list = new List<Chromosome>();
                     for (var j = 0; j < PopulationSize; j++)
                     {
-                        if (j < 0.2 * PopulationSize)
+                        if (j < 0.3 * PopulationSize)
                         {
                             list.Add(population[j]);
                         }
@@ -85,6 +85,11 @@ namespace Lab1
 
                     population = list;
                 }
+
+                /*foreach (var d in population)
+                {
+                    Console.WriteLine(d.fitness);
+                }*/
             }
         }
 
@@ -178,6 +183,7 @@ namespace Lab1
             }
 
             var childrenAndParent = children.Concat(population).ToList();
+            //var childrenAndParent = children;
             childrenAndParent.Sort((a, b) => a.fitness >= b.fitness ? 1 : -1);
 
             var newGeneration = new List<Chromosome>();
@@ -210,32 +216,29 @@ namespace Lab1
             var r = new Random();
             var rChrom = r.Next(0, PopulationSize);
 
-            for (var i = 0; i < numOfSwaps; i++)
-            {
-                swapGenes(rChrom);
-            }
-            
+            var newKey = swapGenes(population[rChrom].key);
+            population[rChrom] = new Chromosome(newKey, encryptedText, bigramDistribution, trigramDistribution);
         }
 
-        public void swapGenes(int rChrom)
+        public string swapGenes(string key)
         {
             var r = new Random();
+            var str = new StringBuilder(key);
 
-            var rGen = r.Next(0, 26);
-            var rGen1 = r.Next(0, 26);
-            while (rGen == rGen1)
+            for (var i = 0; i < numOfSwaps; i++)
             {
-                rGen1 = r.Next(0, 26);
+                var rGen = r.Next(0, 26);
+                var rGen1 = r.Next(0, 26);
+                while (rGen == rGen1)
+                {
+                    rGen1 = r.Next(0, 26);
+                }
+                var temp = str[rGen];
+                str[rGen] = str[rGen1];
+                str[rGen1] = temp;
             }
 
-            var ch = population[rChrom].key;
-
-            StringBuilder str = new StringBuilder(ch);
-            var temp = str[rGen];
-            str[rGen] = str[rGen1];
-            str[rGen1] = temp;
-
-            population[rChrom] = new Chromosome(str.ToString(), encryptedText, bigramDistribution,trigramDistribution);
+            return str.ToString();
         }
 
         public (Chromosome, Chromosome) TournamentSelection()

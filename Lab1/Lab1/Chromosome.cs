@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -22,10 +23,7 @@ namespace Lab1
 
             bigramDistribution = new Dictionary<string, double>();
             trigramDistribution = new Dictionary<string, double>();
-            /*foreach (var t in englishTextBigramDistribution.Keys)
-            {
-                bigramDistribution[t] = 0;
-            }*/
+           
             CalculateBigramDistribution();
             CalculateTrigramDistribution();
             CalculateFitness(englishTextBigramDistribution, englishTextTrigramDistribution);
@@ -99,7 +97,7 @@ namespace Lab1
             var trigramCount = decryptedText.Length - 2;
             foreach (var trigram in trigramDistribution.Keys.ToList())
             {
-                trigramDistribution[trigram] = 0;
+                trigramDistribution[trigram] = trigramDistribution[trigram] / trigramCount;
                 /*if (trigramDistribution.ContainsKey(trigram))
                 {
                     trigramDistribution[trigram] = trigramDistribution[trigram] / trigramCount;
@@ -110,7 +108,6 @@ namespace Lab1
                 }*/
             }
         }
-
         private void CalculateFitness(Dictionary<string, double> englishTextBigramDistribution,Dictionary<string, double> englishTextTrigramDistribution)
         {
             fitness = 0;
@@ -130,13 +127,31 @@ namespace Lab1
             {
                 if (trigramDistribution.ContainsKey(trigram))
                 {
-                    fitness += Math.Abs(englishTextTrigramDistribution[trigram] - trigramDistribution[trigram]) * 300;
+                    fitness += Math.Abs(englishTextTrigramDistribution[trigram] - trigramDistribution[trigram]) * 200;
                 }
                 else
                 {
-                    fitness += englishTextTrigramDistribution[trigram] * 300;
+                    fitness += englishTextTrigramDistribution[trigram] * 200;
                 }
             }
+
+            /*var b = new Dictionary<string, double>(englishTextBigramDistribution);
+            foreach (var (bigram, value) in bigramDistribution)
+            {
+                fitness += Math.Abs(englishTextBigramDistribution[bigram] - value) * 100;
+                b.Remove(bigram);
+            }
+            fitness += b.Sum(x => x.Value) * 100;
+            
+            
+            var g = new Dictionary<string, double>(englishTextTrigramDistribution);
+            foreach (var (trigram,value) in trigramDistribution)
+            {
+                fitness += Math.Abs(englishTextTrigramDistribution[trigram] - value) * 200;
+                g.Remove(trigram);
+            }
+
+            fitness += g.Sum(x => x.Value) * 200;*/
         }
     }
 }

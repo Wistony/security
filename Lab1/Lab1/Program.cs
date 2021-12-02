@@ -31,7 +31,35 @@ namespace Lab1
             //Task2();
             //Task3();
             Task4();
+
+            /*var key = "EKMFLGDQVJNTOWYHZUSPAIBRCX";
+            var key1 = "EKMFLGDQVJITOWYHZUSPANBXCR"; //best
+            var key2 = "EOMFLBDQVIKTGWYHXUSPANRJCZ";
+            const string encryptedText =
+                "EFFPQLEKVTVPCPYFLMVHQLUEWCNVWFYGHYTCETHQEKLPVMSAKSPVPAPVYWMVHQLUSPQLYWLASLFVWPQLMVHQLUPLRPSQLULQESPBLWPCSVRVWFLHLWFLWPUEWFYOTCMQYSLWOYWYETHQEKLPVMSAKSPVPAPVYWHEPPLUWSGYULEMQTLPPLUGUYOLWDTVSQETHQEKLPVPVSMTLEUPQEPCYAMEWWYTYWDLUULTCYWPQLSEOLSVOHTLUYAPVWLYGDALSSVWDPQLNLCKCLRQEASPVILSLEUMQBQVMQCYAHUYKEKTCASLFPYFLMVHQLUPQLHULIVYASHEUEDUEHQBVTTPQLVWFLRYGMYVWMVFLWMLSPVTTBYUNESESADDLSPVYWCYAMEWPUCPYFVIVFLPQLOLSSEDLVWHEUPSKCPQLWAOKLUYGMQEUEMPLUSVWENLCEWFEHHTCGULXALWMCEWETCSVSPYLEMQYGPQLOMEWCYAGVWFEBECPYASLQVDQLUYUFLUGULXALWMCSPEPVSPVMSBVPQPQVSPCHLYGMVHQLUPQLWLRPOEDVMETBYUFBVTTPENLPYPQLWLRPTEKLWZYCKVPTCSTESQPBYMEHVPETCMEHVPETZMEHVPETKTMEHVPETCMEHVPETT";
+            var uk = new GeneticAlgorithm(encryptedText);
             
+            var g = new Chromosome(key, encryptedText, uk.bigramDistribution, uk.trigramDistribution);
+            var wrong = new Chromosome(key1, encryptedText, uk.bigramDistribution, uk.trigramDistribution);
+            var wrong1 = new Chromosome(key2, encryptedText, uk.bigramDistribution, uk.trigramDistribution);
+
+            Console.WriteLine(g.fitness);
+            Console.WriteLine(wrong.fitness);
+            Console.WriteLine(wrong1.fitness);*/
+
+            /*var charArray = new char[encryptedText.Length];
+            for (var i = 0; i < key.Length; i++)
+            {
+                for (var j = 0; j < encryptedText.Length; j++)
+                {
+                    if (key[i] == encryptedText[j])
+                    {
+                        charArray[j] = (char) ('A' + i);
+                    }
+                }
+            }
+            var decryptedText = new string(charArray);
+            Console.WriteLine(decryptedText);*/
         }
 
         private static void Task1()
