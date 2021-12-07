@@ -30,36 +30,8 @@ namespace Lab1
             //Task1();
             //Task2();
             //Task3();
-            Task4();
-
-            /*var key = "EKMFLGDQVJNTOWYHZUSPAIBRCX";
-            var key1 = "EKMFLGDQVJITOWYHZUSPANBXCR"; //best
-            var key2 = "EOMFLBDQVIKTGWYHXUSPANRJCZ";
-            const string encryptedText =
-                "EFFPQLEKVTVPCPYFLMVHQLUEWCNVWFYGHYTCETHQEKLPVMSAKSPVPAPVYWMVHQLUSPQLYWLASLFVWPQLMVHQLUPLRPSQLULQESPBLWPCSVRVWFLHLWFLWPUEWFYOTCMQYSLWOYWYETHQEKLPVMSAKSPVPAPVYWHEPPLUWSGYULEMQTLPPLUGUYOLWDTVSQETHQEKLPVPVSMTLEUPQEPCYAMEWWYTYWDLUULTCYWPQLSEOLSVOHTLUYAPVWLYGDALSSVWDPQLNLCKCLRQEASPVILSLEUMQBQVMQCYAHUYKEKTCASLFPYFLMVHQLUPQLHULIVYASHEUEDUEHQBVTTPQLVWFLRYGMYVWMVFLWMLSPVTTBYUNESESADDLSPVYWCYAMEWPUCPYFVIVFLPQLOLSSEDLVWHEUPSKCPQLWAOKLUYGMQEUEMPLUSVWENLCEWFEHHTCGULXALWMCEWETCSVSPYLEMQYGPQLOMEWCYAGVWFEBECPYASLQVDQLUYUFLUGULXALWMCSPEPVSPVMSBVPQPQVSPCHLYGMVHQLUPQLWLRPOEDVMETBYUFBVTTPENLPYPQLWLRPTEKLWZYCKVPTCSTESQPBYMEHVPETCMEHVPETZMEHVPETKTMEHVPETCMEHVPETT";
-            var uk = new GeneticAlgorithm(encryptedText);
-            
-            var g = new Chromosome(key, encryptedText, uk.bigramDistribution, uk.trigramDistribution);
-            var wrong = new Chromosome(key1, encryptedText, uk.bigramDistribution, uk.trigramDistribution);
-            var wrong1 = new Chromosome(key2, encryptedText, uk.bigramDistribution, uk.trigramDistribution);
-
-            Console.WriteLine(g.fitness);
-            Console.WriteLine(wrong.fitness);
-            Console.WriteLine(wrong1.fitness);*/
-
-            /*var charArray = new char[encryptedText.Length];
-            for (var i = 0; i < key.Length; i++)
-            {
-                for (var j = 0; j < encryptedText.Length; j++)
-                {
-                    if (key[i] == encryptedText[j])
-                    {
-                        charArray[j] = (char) ('A' + i);
-                    }
-                }
-            }
-            var decryptedText = new string(charArray);
-            Console.WriteLine(decryptedText);*/
+            //Task4();
+            Task5();
         }
 
         private static void Task1()
@@ -98,7 +70,56 @@ namespace Lab1
             const string encryptedText =
                 "EFFPQLEKVTVPCPYFLMVHQLUEWCNVWFYGHYTCETHQEKLPVMSAKSPVPAPVYWMVHQLUSPQLYWLASLFVWPQLMVHQLUPLRPSQLULQESPBLWPCSVRVWFLHLWFLWPUEWFYOTCMQYSLWOYWYETHQEKLPVMSAKSPVPAPVYWHEPPLUWSGYULEMQTLPPLUGUYOLWDTVSQETHQEKLPVPVSMTLEUPQEPCYAMEWWYTYWDLUULTCYWPQLSEOLSVOHTLUYAPVWLYGDALSSVWDPQLNLCKCLRQEASPVILSLEUMQBQVMQCYAHUYKEKTCASLFPYFLMVHQLUPQLHULIVYASHEUEDUEHQBVTTPQLVWFLRYGMYVWMVFLWMLSPVTTBYUNESESADDLSPVYWCYAMEWPUCPYFVIVFLPQLOLSSEDLVWHEUPSKCPQLWAOKLUYGMQEUEMPLUSVWENLCEWFEHHTCGULXALWMCEWETCSVSPYLEMQYGPQLOMEWCYAGVWFEBECPYASLQVDQLUYUFLUGULXALWMCSPEPVSPVMSBVPQPQVSPCHLYGMVHQLUPQLWLRPOEDVMETBYUFBVTTPENLPYPQLWLRPTEKLWZYCKVPTCSTESQPBYMEHVPETCMEHVPETZMEHVPETKTMEHVPETCMEHVPETT";
 
+            var key = "EKMFLGDQVJNTOWYHXUSPAIBRCZ";      
             var g = new GeneticAlgorithm(encryptedText);
+
+            var h = new Chromosome(key, encryptedText, g.bigramDistribution, g.trigramDistribution);
+            Console.WriteLine(h.decryptedText);
+        }
+
+        private static void Task5()
+        {
+            const string encryptedText =
+                "UMUPLYRXOYRCKTYYPDYZTOUYDZHYJYUNTOMYTOLTKAOHOKZCMKAVZDYBRORPTHQLSERUOERMKZGQJOIDJUDNDZATUVOTTLMQBOWNMERQTDTUFKZCMTAZMEOJJJOXMERKJHACMTAZATIZOEPPJKIJJNOCFEPLFBUNQHHPPKYYKQAZKTOTIKZNXPGQZQAZKTOTIZYNIUISZIAELMKSJOYUYYTHNEIEOESULOXLUEYGBEUGJLHAJTGGOEOSMJHNFJALFBOHOKAGPTIHKNMKTOUUUMUQUDATUEIRBKYUQTWKJKZNLDRZBLTJJJIDJYSULJARKHKUKBISBLTOJRATIOITHYULFBITOVHRZIAXFDRNIORLZEYUUJGEBEYLNMYCZDITKUXSJEJCFEUGJJOTQEZNORPNUDPNQIAYPEDYPDYTJAIGJYUZBLTJJYYNTMSEJYFNKHOTJARNLHHRXDUPZIALZEDUYAOSBBITKKYLXKZNQEYKKZTOKHWCOLKURTXSKKAGZEPLSYHTMKRKJIIQZDTNHDYXMEIRMROGJYUMHMDNZIOTQEKURTXSKKAGZEPLSYHTMKRKJIIQZDTNROAUYLOTIMDQJYQXZDPUMYMYPYRQNYFNUYUJJEBEOMDNIYUOHYYYJHAOQDRKKZRRJEPCFNRKJUHSJOIRQYDZBKZURKDNNEOYBTKYPEJCMKOAJORKTKJLFIOQHYPNBTAVZEUOBTKKBOWSBKOSKZUOZIHQSLIJJMSURHYZJJZUKOAYKNIYKKZNHMITBTRKBOPNUYPNTTPOKKZNKKZNLKZCFNYTKKQNUYGQJKZNXYDNJYYMEZRJJJOXMERKJVOSJIOSIQAGTZYNZIOYSMOHQDTHMEDWJKIULNOTBCALFBJNTOGSJKZNEEYYKUIXLEUNLNHNMYUOMWHHOOQNUYGQJKZLZJZLOLATSEHQKTAYPYRZJYDNQDTHBTKYKYFGJRRUFEWNTHAXFAHHODUPZMXUMKXUFEOTIMUNQIHGPAACFKATIKIZBTOTIKZNKKZNLORUKMLLFBUUQKZNLEOHIEOHEDRHXOTLMIRKLEAHUYXCZYTGUYXCZYTIUYXCZYTCVJOEBKOHE";
+
+            /*var text1 = "";
+            var text2 = "";
+            var text3 = "";
+            var text4 = "";
+
+            for (var i = 0; i < encryptedText.Length; i+=4)
+            {
+                text1 += encryptedText[i];
+            }
+            
+            for (var i = 1; i < encryptedText.Length; i+=4)
+            {
+                text2 += encryptedText[i];
+            }
+            
+            for (var i = 2; i < encryptedText.Length; i+=4)
+            {
+                text3 += encryptedText[i];
+            }
+            
+            for (var i = 3; i < encryptedText.Length; i+=4)
+            {
+                text4 += encryptedText[i];
+            }
+
+            var key1 = "ZNPLJSRTBADQHMFEGUOKIVXWYC";
+            var key2 = "ERLZKAQHDXCJBTOUSMIYNPWGVF";
+            var key3 = "RQXDOJWTYCBPKIUMVHZAGLFESN";
+            var key4 = "UVKZNORSQIAGJHCEFLYTXDPBMW";
+            //CalculateIndexOfCoincidence(encryptedText,50);
+            var g = new GeneticAlgorithm1(encryptedText);
+            Console.WriteLine(encryptedText);
+            var h = new Chromosome1(new List<string> {key1, key2, key3, key4}, encryptedText, g.onegramDistribution,g.bigramDistribution,
+                g.trigramDistribution);
+            Console.WriteLine(h.decryptedText);*/
+            
+            
+            var g = new GeneticAlgorithm1(encryptedText);
         }
         private static string Xor(string text, int[] keys)
         {
