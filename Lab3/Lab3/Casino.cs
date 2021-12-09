@@ -27,6 +27,7 @@ namespace Lab3
         {
             var method = "play" + mode + "?id=" + id + "&bet=" + bet + "&number=" + number;
             var jsonResponse = GetApiResponse(ApiUrl + method);
+            Console.WriteLine(jsonResponse);
             return JsonSerializer.Deserialize<Bet>(jsonResponse);
         }
 

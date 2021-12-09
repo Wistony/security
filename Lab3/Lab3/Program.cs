@@ -7,47 +7,27 @@ namespace Lab3
     {
         private static void Main(string[] args)
         {
+            //AttackLcg.Run();
             var acc = Casino.CreateAccount();
-            
-            var nums = GetThreeLcgNum(acc);
-
-            var lcg = new AttackLcg(nums);
-            while (!lcg.findParameters())
+            var startTime = (ulong) DateTimeOffset.UtcNow.ToUnixTimeSeconds() - 3600;
+            var bet = Casino.MakeBet("Mt", acc.id, 10, 5);
+            var endTime = (ulong) DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+           // var seed = DateTimeOffset.Parse(bet.).ToUnixTimeSeconds(); //- 3600;
+            Console.WriteLine(endTime - startTime);
+            for (ulong i = 0; i < endTime - startTime; i++)
             {
-                nums = GetThreeLcgNum(acc);
-                lcg = new AttackLcg(nums);
+                var seed = startTime + i;
+                var mt = new MersenneTwister(seed);
+                for (var j = 0; j < 634; j++)
+                {
+                    var num = mt.extract_number();
+                    if (num == bet.realNumber)
+                    {
+                        Console.WriteLine("GG");
+                    }
+                }
             }
-
-            var predictedVal = lcg.GetPredictedValue(nums[2]);
-            var i = 0;
-            while (i < 10)
-            {
-                var bet = Casino.MakeBet("Lcg", acc.id, 100, predictedVal);
-                Console.WriteLine("-----------");
-                Console.WriteLine("Id: " + acc.id);
-                Console.WriteLine("Message: " + bet.message);
-                Console.WriteLine("Money: " + bet.account.money);
-                Console.WriteLine("Predicted val: " + predictedVal);
-                Console.WriteLine("Real val: " + bet.realNumber);
-                predictedVal = lcg.GetPredictedValue(predictedVal);
-                i++;
-            }
-         
-
-
+            Console.WriteLine("((");
         }
-
-        private static List<int> GetThreeLcgNum(Account acc)
-        {
-            var nums = new List<int>(3);
-            for (var i = 0; i < 3; i++)
-            {
-                var bet = Casino.MakeBet("Lcg", acc.id, 10, 3);
-                nums.Add(bet.realNumber);
-            }
-
-            return nums;
-        }
-        
     }
 }
