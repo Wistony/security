@@ -65,7 +65,7 @@ namespace Lab3
 
             var predictedVal = lcg.GetPredictedValue(nums[2]);
             var i = 0;
-            while (i < 10)
+            while (i < 30)
             {
                 var bet = Casino.MakeBet("Lcg", acc.id, 100, predictedVal);
                 Console.WriteLine("-----------");

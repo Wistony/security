@@ -4,6 +4,6 @@
     {
         public string message { get; set; }
         public Account account { get; set; }
-        public ulong realNumber { get; set; }
+        public long realNumber { get; set; }
     }
 }

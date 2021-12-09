@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 
 namespace Lab3
 {
@@ -9,25 +10,23 @@ namespace Lab3
         {
             //AttackLcg.Run();
             var acc = Casino.CreateAccount();
-            var startTime = (ulong) DateTimeOffset.UtcNow.ToUnixTimeSeconds() - 3600;
-            var bet = Casino.MakeBet("Mt", acc.id, 10, 5);
-            var endTime = (ulong) DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-           // var seed = DateTimeOffset.Parse(bet.).ToUnixTimeSeconds(); //- 3600;
-            Console.WriteLine(endTime - startTime);
-            for (ulong i = 0; i < endTime - startTime; i++)
+            AttackMt mtt = new AttackMt();
+
+            var seed = (uint) DateTimeOffset.UtcNow.ToUnixTimeSeconds()p;
+            var mt = new MersenneTwister(seed);
+            var bet = Casino.MakeBet("Mt", acc.id, 1000, mt.extract_number());
+            for (var i = 0; i < 624; i++)
             {
-                var seed = startTime + i;
-                var mt = new MersenneTwister(seed);
-                for (var j = 0; j < 634; j++)
-                {
-                    var num = mt.extract_number();
-                    if (num == bet.realNumber)
-                    {
-                        Console.WriteLine("GG");
-                    }
-                }
+                Console.WriteLine(bet.message);
+                Console.WriteLine("MySeed " + seed);
+                mtt.Attack((uint)bet.realNumber, seed + 5);
             }
-            Console.WriteLine("((");
+            
+            if (bet.account.money >= 1000000)
+            {
+                Console.WriteLine("gg you win million");
+            }
         }
     }
 }
+

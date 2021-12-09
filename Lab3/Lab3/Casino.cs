@@ -23,11 +23,10 @@ namespace Lab3
             return JsonSerializer.Deserialize<Account>(jsonResponse);
         }
 
-        public static Bet MakeBet(string mode, string id, uint bet, int number)
+        public static Bet MakeBet(string mode, string id, uint bet, long number)
         {
             var method = "play" + mode + "?id=" + id + "&bet=" + bet + "&number=" + number;
             var jsonResponse = GetApiResponse(ApiUrl + method);
-            Console.WriteLine(jsonResponse);
             return JsonSerializer.Deserialize<Bet>(jsonResponse);
         }
 

@@ -5,71 +5,71 @@ namespace Lab3
     public class MersenneTwister
     {
         public const int w = 32;
-        public const ulong n = 624;
-        public const ulong m = 397;
-        public const ulong r = 31;
-        public const ulong a = 0x9908B0DF;
+        public const uint n = 624;
+        public const uint m = 397;
+        //public const uint r = 31;
+        public const uint a = 0x9908B0DF;
+        public const uint d = 0xFFFFFFFF;
+        public const uint b = 0x9D2C5680;
+        public const uint c = 0xEFC60000;
         public const int u = 11;
-        public const ulong d = 0xFFFFFFFF;
         public const int s = 7;
-        public const ulong b = 0x9D2C5680;
         public const int t = 15;
-        public const ulong c = 0xEFC60000;
         public const int l = 18;
-        public const ulong f = 1812433253;
+        public const uint f = 1812433253u;
 
-        public const ulong lower_mask = 0x7FFFFFFF;
-        public const ulong upper_mask = ~lower_mask;
+        public const uint lower_mask = 0x7fffffff;
+        public const uint upper_mask = 0x80000000;
 
-        private ulong[] MT = new ulong[n];
-        private ulong index = n + 1;
+        private uint[] MT = new uint[n];
+        private uint _index = n + 1;
 
-        public MersenneTwister(ulong seed)
+        public MersenneTwister(uint seed)
         {
             seed_mt(seed);
         }
 
-        private void seed_mt(ulong seed)
+        private void seed_mt(uint seed)
         {
-            index = n;
+            _index = n;
             MT[0] = seed;
 
-            for (ulong i = 1; i < n; ++i)
+            for (uint i = 1; i < n; i++)
             {
-                MT[i] = (f * (MT[i - 1] ^ (MT[i - 1] >> (w - 2))) + i);
+                MT[i] = f * (MT[i - 1] ^ (MT[i - 1] >> (w - 2))) + i;
             }
             
-            twist();
+            Twist();
         }
 
-        public ulong extract_number()
+        public uint extract_number()
         {
-            if (index >= n)
+            if (_index >= n)
             {
-                if (index > n)
+                if (_index > n)
                 {
                     throw new Exception("Generator was never seeded");
                 }
-                twist();
+                Twist();
             }
 
-            ulong y = MT[index];
-            y = y ^ ((y >> u) & d);
+            var y = MT[_index];
+            y = y ^ (y >> u);
             y = y ^ ((y << s) & b);
             y = y ^ ((y << t) & c);
             y = y ^ (y >> l);
 
-            ++index;
+            ++_index;
 
             return y;
         }
 
-        private void twist()
+        private void Twist()
         {
-            for (ulong i = 0; i < n; ++i)
+            for (uint i = 0; i < n; i++)
             {
-                ulong x = (MT[i] & upper_mask) + (MT[(i + 1) % n] & lower_mask);
-                ulong xA = x >> 1;
+                var x = (MT[i] & upper_mask) + MT[(i + 1) % n] & lower_mask;
+                var xA = x >> 1;
 
                 if (x % 2 != 0)
                 {
@@ -79,7 +79,7 @@ namespace Lab3
                 MT[i] = MT[(i + m) % n] ^ xA;
             }
 
-            index = 0;
+            _index = 0;
         }
     }
 }
