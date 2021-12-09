@@ -13,7 +13,7 @@ namespace Lab3
                 var mt = new MersenneTwister(seed); 
                 for (var j = 0; j < 624; j++)
                 {
-                    var num = mt.extract_number();
+                    var num = mt.Temper();
                     if (num == realNumber)
                     {
                         Console.WriteLine("Real seed: " + seed);
