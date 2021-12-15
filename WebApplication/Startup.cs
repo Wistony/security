@@ -30,10 +30,36 @@ namespace WebApplication
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            
+
             services.AddDefaultIdentity<IdentityUser>(
-                    options => options.SignIn.RequireConfirmedAccount = true)
+                    options =>
+                    {
+                        options.SignIn.RequireConfirmedAccount = true;
+                        options.SignIn.RequireConfirmedEmail = true;
+
+                        options.Password.RequireDigit = true;
+                        options.Password.RequiredLength = 8;
+                        options.Password.RequireNonAlphanumeric = true;
+                        options.Password.RequireUppercase = true;
+                        options.Password.RequireLowercase = true;
+                        options.Password.RequiredUniqueChars = 6;
+                        
+                        options.User.RequireUniqueEmail = true;
+                        
+                        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                        options.Lockout.MaxFailedAccessAttempts = 3;
+                        options.Lockout.AllowedForNewUsers = true;
+                    }
+                )
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+                
+            services.ConfigureApplicationCookie(options =>
+            { 
+                options.Cookie.HttpOnly = true; //Якщо прапор HttpOnly (необов’язково) включено в заголовок відповіді HTTP, доступ до файлу cookie неможливо отримати через сценарій на стороні клієнта
+                options.ExpireTimeSpan= TimeSpan.FromHours(1);
+                options.SlidingExpiration = false; //буде оновлений через половину часу, якщо буде зроблений запит до сервера
+            });
+            
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
