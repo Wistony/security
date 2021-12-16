@@ -43,7 +43,7 @@ namespace WebApplication
                         options.Password.RequireUppercase = true;
                         options.Password.RequireLowercase = true;
                         options.Password.RequiredUniqueChars = 6;
-                        
+
                         options.User.RequireUniqueEmail = true;
                         
                         options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
@@ -52,7 +52,11 @@ namespace WebApplication
                     }
                 )
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-                
+            
+            services.Configure<PasswordHasherOptions>(
+                options => options.IterationCount = 310_000
+                );
+            
             services.ConfigureApplicationCookie(options =>
             { 
                 options.Cookie.HttpOnly = true; //Якщо прапор HttpOnly (необов’язково) включено в заголовок відповіді HTTP, доступ до файлу cookie неможливо отримати через сценарій на стороні клієнта
