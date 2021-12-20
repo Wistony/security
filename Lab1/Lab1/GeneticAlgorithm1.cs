@@ -9,8 +9,8 @@ namespace Lab1
     public class GeneticAlgorithm1
     {
         private const int PopulationSize = 50;
-        private double mutationRate = 0.8; //percent
-        private int numOfSwaps = 1;
+        private double mutationRate = 0.5; //percent
+        private int numOfSwaps = 2;
         private string Alphabet;
         private string encryptedText;
         private List<Chromosome1> population;
@@ -72,14 +72,14 @@ namespace Lab1
                     Console.WriteLine("Text: " + bestKey.decryptedText);
                 }
                 
-                if (withoutNewBest > 300)
+                if (withoutNewBest > 200)
                 {
                     withoutNewBest = 0;
                     population.Sort((a, b) => a.fitness >= b.fitness ? 1 : -1);
                     var list = new List<Chromosome1>();
                     for (var j = 0; j < PopulationSize; j++)
                     {
-                        if (j < 0.3 * PopulationSize)
+                        if (j < 0.2 * PopulationSize)
                         {
                             list.Add(population[j]);
                         }
@@ -91,8 +91,8 @@ namespace Lab1
                                 var randomKey = GenerateRandomKeys();
                                 keys.Add(randomKey);
                             }
-                            list.Add(new Chromosome1(keys,
-                            encryptedText,onegramDistribution,bigramDistribution,trigramDistribution));
+                            list.Add(new Chromosome1(keys, 
+                                encryptedText,onegramDistribution,bigramDistribution,trigramDistribution));
                         }
                     }
 
@@ -174,7 +174,7 @@ namespace Lab1
             }
         }
 
-        public List<string> CrossTwoParent(Chromosome1 parent1, Chromosome1 parent2)
+        private List<string> CrossTwoParent(Chromosome1 parent1, Chromosome1 parent2)
         {
             var keys = new List<string>();
             for (var i = 0; i < KEY; i++)
@@ -183,10 +183,9 @@ namespace Lab1
                 var rInt = r.Next(1, 26);
 
                 var newKey = parent1.keys[i][..rInt];
-                foreach (var ch in parent2.keys[i])
+                foreach (var ch in parent2.keys[i].Where(ch => !newKey.Contains(ch)))
                 {
-                    if (!newKey.Contains(ch))
-                        newKey += ch;
+                    newKey += ch;
                 }
                 
                 keys.Add(newKey);
@@ -194,10 +193,8 @@ namespace Lab1
 
             return keys;
         }
-        
-        
-        
-        public void Crossover()
+
+        private void Crossover()
         {
             var children = new List<Chromosome1>();
             for (var i = 0; i < PopulationSize; i++)
@@ -205,26 +202,30 @@ namespace Lab1
                 var (parent1, parent2) = TournamentSelection();
                 
                 var childKey1 = CrossTwoParent(parent1, parent2);
-                while(children.Any(ch => isEqual(ch.keys,childKey1)))
+                while(children.Any(ch => IsEqual(ch.keys,childKey1)))
                 {
                     (parent1, parent2) = TournamentSelection();
                     childKey1 = CrossTwoParent(parent1, parent2);
                 }
-                children.Add(new Chromosome1(childKey1,encryptedText,onegramDistribution,bigramDistribution, trigramDistribution));
+
+                var chr = new Chromosome1(childKey1, encryptedText, onegramDistribution, bigramDistribution,
+                    trigramDistribution);
+                children.Add(chr);
                 
                 var childKey2 = CrossTwoParent(parent2, parent1);
 
-                while(children.Any(ch => isEqual(ch.keys, childKey2)))
+                while(children.Any(ch => IsEqual(ch.keys, childKey2)))
                 {
                     (parent1, parent2) = TournamentSelection();
                     childKey2 = CrossTwoParent(parent2, parent1);
                 }
-                
-                children.Add(new Chromosome1(childKey2,encryptedText,onegramDistribution,bigramDistribution, trigramDistribution));
+
+                chr = new Chromosome1(childKey2, encryptedText, onegramDistribution, bigramDistribution,
+                    trigramDistribution);
+                children.Add(chr);
             }
 
             var childrenAndParent = children.Concat(population).ToList();
-            //var childrenAndParent = children;
             childrenAndParent.Sort((a, b) => a.fitness >= b.fitness ? 1 : -1);
 
             var newGeneration = new List<Chromosome1>();
@@ -233,6 +234,35 @@ namespace Lab1
                 newGeneration.Add(childrenAndParent[i]);
             }
 
+            /*
+            var gg = new List<Chromosome1>();
+            for (var i = Convert.ToInt32(PopulationSize * 0.6); i < PopulationSize; i++)
+            {
+                gg.Add(childrenAndParent[i]);
+            }
+            
+            var rn = new Random();
+            gg = gg.OrderBy(item => rn.Next()).ToList();
+            
+            for (var i = 0; i < PopulationSize * 0.4; i++)
+            {
+                newGeneration.Add(gg[i]);
+            }*/
+
+            //Console.WriteLine(newGeneration.Count);
+
+            /*Console.WriteLine("----");
+            foreach (var chr in newGeneration)
+            {
+                Console.WriteLine(chr.fitness);
+                foreach (var k in chr.keys)
+                {
+                    Console.WriteLine(k);
+                }
+                Console.WriteLine(chr.decryptedText);
+            }
+            */
+            
             if (bestKey.fitness > newGeneration[0].fitness)
             {
                 bestKey = newGeneration[0];
@@ -243,48 +273,44 @@ namespace Lab1
                 withoutNewBest += 1;
             }
             
-            
-
-            
             var rnd = new Random();
             population = newGeneration.OrderBy(item => rnd.Next()).ToList();
            
             for (var i = 0; i < PopulationSize * mutationRate; i++)
             {
-                mutation();
+                Mutation();
             }
         }
 
-        public void mutation()
+        private void Mutation()
         {
             var r = new Random();
             var rChrom = r.Next(0, PopulationSize);
             var keys = new List<string>(population[rChrom].keys);
-            for (var i = 0; i < 2; i++)
+            var numOfMutation = r.Next(1, KEY + 1);
+            for (var i = 0; i < numOfMutation; i++)
             {
                 var keyIndex = r.Next(0, KEY);
-                //Console.WriteLine(population[rChrom].keys.Count);
-                var newKey = swapGenes(population[rChrom].keys[keyIndex]);
+                var newKey = SwapGenes(population[rChrom].keys[keyIndex]);
                 keys[keyIndex] = newKey;
             }
             population[rChrom] = new Chromosome1(keys, encryptedText, onegramDistribution,bigramDistribution, trigramDistribution);
         }
         
-        /*public void mutation()
+        /*public void Mutation()
         {
             var r = new Random();
             var rChrom = r.Next(0, PopulationSize);
             var keys = new List<string>();
             for (var i = 0; i < KEY; i++)
             {
-                var newKey = swapGenes(population[rChrom].keys[i]);
+                var newKey = SwapGenes(population[rChrom].keys[i]);
                 keys.Add(newKey);
             }
             population[rChrom] = new Chromosome1(keys, encryptedText, onegramDistribution,bigramDistribution, trigramDistribution);
-        }
-        */
+        }*/
 
-        public string swapGenes(string key)
+        public string SwapGenes(string key)
         {
             var r = new Random();
             var str = new StringBuilder(key);
@@ -320,7 +346,7 @@ namespace Lab1
                 population[rInt2] : population[rInt1];
 
             var count = 0;
-            while (isEqual(parent1.keys,parent2.keys) && count < 5)
+            while (IsEqual(parent1.keys,parent2.keys) && count < 5)
             {
                 rInt1 = r.Next(0, PopulationSize);
                 rInt2 = r.Next(0, PopulationSize);
@@ -331,7 +357,7 @@ namespace Lab1
             return (parent1, parent2);
         }
 
-        private bool isEqual(List<string> ch1, List<string> ch2)
+        private bool IsEqual(List<string> ch1, List<string> ch2)
         {
             var isEqual = true;
             for (var i = 0; i < KEY; i++)

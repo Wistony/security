@@ -11,7 +11,7 @@ namespace Lab1
     {
         public List<string> keys;
         public string decryptedText;
-        private int KEY = 1;
+        private int KEY = 4;
         
         //private Dictionary<char, List<double>> onegramDistribution;
         private Dictionary<char, double> onegramDistribution;
@@ -46,17 +46,13 @@ namespace Lab1
             {
                 for (var i = 0; i < keys[k].Length; i++)
                 {
-                    //Console.WriteLine(keys[k]);
-                    //Console.WriteLine("---");
                     for (var j = k; j < encryptedText.Length; j += KEY) 
                     {
-                        //Console.Write(encryptedText[j]);
                         if (keys[k][i] == encryptedText[j])
                         {
                             charArray[j] = (char) ('A' + i);
                         }
                     }
-                    //Console.WriteLine();
                 }
             }
 
@@ -139,11 +135,12 @@ namespace Lab1
             {
                 if (bigramDistribution.ContainsKey(bigram))
                 {
-                    fitness += Math.Abs(englishTextBigramDistribution[bigram] - bigramDistribution[bigram]) * 150;
+                    fitness += Math.Abs(englishTextBigramDistribution[bigram] - bigramDistribution[bigram]) * 200;
                 }
                 else
                 {
-                    fitness += englishTextBigramDistribution[bigram] * 150;
+                    //fitness += Math.Pow(englishTextBigramDistribution[bigram],2) * 200;
+                    fitness += englishTextBigramDistribution[bigram] * 200;
                 }
             }
             
@@ -151,11 +148,13 @@ namespace Lab1
             {
                 if (trigramDistribution.ContainsKey(trigram))
                 {
-                    fitness += Math.Abs(englishTextTrigramDistribution[trigram] - trigramDistribution[trigram]) * 200;
+                    fitness += Math.Abs(englishTextTrigramDistribution[trigram] - trigramDistribution[trigram]) * 300;
                 }
                 else
                 {
-                    fitness += englishTextTrigramDistribution[trigram] * 200;
+                    //fitness += Math.Pow(englishTextTrigramDistribution[trigram],2) * 300;
+                    fitness += englishTextTrigramDistribution[trigram] * 300;
+
                 }
             }
         }
