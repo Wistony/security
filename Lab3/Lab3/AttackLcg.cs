@@ -22,7 +22,7 @@ namespace Lab3
         }
         
 
-        public bool findParameters()
+        public bool FindParameters()
         {
             var paramsIsFound = false;
             var z_y = z - y;
@@ -57,7 +57,7 @@ namespace Lab3
             var nums = GetThreeLcgNum(acc);
 
             var lcg = new AttackLcg(nums);
-            while (!lcg.findParameters())
+            while (!lcg.FindParameters())
             {
                 nums = GetThreeLcgNum(acc);
                 lcg = new AttackLcg(nums);

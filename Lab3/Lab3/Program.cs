@@ -17,11 +17,12 @@ namespace Lab3
             var seed = (uint) DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var mt = new MersenneTwister(seed);
             var bet = Casino.MakeBet("Mt", acc.id, 1000, mt.Temper());
-            for (var i = 0; i < 624; i++)
+            for (var i = 0; i < 1000; i++)
             {
+                bet = Casino.MakeBet("Mt", acc.id, 1, mt.Temper());
                 Console.WriteLine(bet.message);
                 Console.WriteLine("MySeed " + seed);
-                mtt.Attack((uint)bet.realNumber, seed + 5);
+               // mtt.Attack((uint)bet.realNumber, seed + 5);
             }
             
             if (bet.account.money >= 1000000)
@@ -31,12 +32,13 @@ namespace Lab3
 
             
             
+            /*
             var acc = Casino.CreateAccount();
             var states = new List<uint>();
             for (var i = 0; i < 624; i++)
             {
                 Console.WriteLine(i);
-                var bet = Casino.MakeBet("BetterMt", acc.id, 1, 3);
+                var bet = Casino.MakeBet("BetterMt", acc.id, 1, i);
                 states.Add((uint)bet.realNumber);
             }
 
@@ -48,9 +50,7 @@ namespace Lab3
                 var predictedValue = mt.Temper();
                 var bet = Casino.MakeBet("BetterMt", acc.id, 5, predictedValue);
                 Console.WriteLine(bet.message);
-            }
-
-
+            }*/
         }
     }
 }

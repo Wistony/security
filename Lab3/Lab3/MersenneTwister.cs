@@ -54,10 +54,6 @@ namespace Lab3
         {
             if (_index >= n)
             {
-                if (_index > n)
-                {
-                    throw new Exception("Generator was never seeded");
-                }
                 Twist();
             }
 

@@ -35,14 +35,15 @@ namespace Lab3
             string jsonResponse;
             try
             {
-                var webResponse = WebRequest.CreateHttp(requestUrl).GetResponse();
+                var webResponse = WebRequest.CreateHttp(requestUrl).GetResponseAsync();
                 using var reader =
-                        new StreamReader(webResponse.GetResponseStream()!);
+                        new StreamReader(webResponse.Result.GetResponseStream()!);
                 jsonResponse = reader.ReadToEnd();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
+                Console.WriteLine("G");
                 jsonResponse = "Error";
             }
             
